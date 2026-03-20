@@ -3,36 +3,555 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bharani's Professional Portfolio</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Developer Portfolio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #151d3b;
+            --bg-tertiary: #1f2942;
+            --accent: #00d9ff;
+            --accent-warm: #ff6b35;
+            --text-primary: #ffffff;
+            --text-secondary: #a0aec0;
+            --border: #2d3748;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(0, 217, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 107, 53, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.8);
+            border-bottom: 1px solid var(--border);
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 60px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        .hero-content h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            animation: slideUp 0.8s ease-out 0.4s both;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.6s both;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), #00b8d4));
+            color: var(--bg-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 217, 255, 0.3);
+        }
+
+        .btn-secondary {
+            border: 2px solid var(--accent);
+            color: var(--accent);
+            background: transparent;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(0, 217, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h2 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-warm));
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .skill-badge {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            padding: 0.8rem;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .skill-badge:hover {
+            background: var(--bg-tertiary);
+            border-color: var(--accent);
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: rgba(0, 217, 255, 0.3);
+        }
+
+        .project-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .project-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .project-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag {
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--accent);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(0, 217, 255, 0.3);
+        }
+
+        /* Contact Section */
+        .contact-wrapper {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .contact-link:hover {
+            color: var(--accent);
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="card">
-            <div class="card-body text-center">
-                <h1 class="card-title">Welcome to Bharani's Professional Portfolio</h1>
-                <p class="card-text">Hello! I am a seasoned Machine Learning Developer with extensive expertise in Artificial Intelligence, Data Science, Generative AI, Cloud Computing (AWS, Azure), and Linux.</p>
+    <nav>
+        <div class="logo">Dev.</div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Hi, I'm <span class="highlight">Bharani</span></h1>
+            <p>GenAI Application Developer with 6+ years in AI/ML. I build intelligent, production-grade AI applications on AWS, leveraging Claude and advanced LLM technologies to create solutions that transform businesses.</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="document.getElementById('projects').scrollIntoView({behavior: 'smooth'})">View My Work</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('contact').scrollIntoView({behavior: 'smooth'})">Get in Touch</button>
             </div>
         </div>
+    </section>
 
-        <div class="card mt-4">
-            <div class="card-body">
-                <h2 class="card-title">Core Competencies</h2>
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Artificial Intelligence (AI)</li>
-                    <li class="list-group-item">Data Science</li>
-                    <li class="list-group-item">Generative AI</li>
-                    <li class="list-group-item">Cloud Computing (AWS, Azure)</li>
-                    <li class="list-group-item">Linux</li>
-                </ul>
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="about-grid">
+            <div>
+                <p>I'm a GenAI Application Developer with 6+ years of experience in AI and machine learning. My journey started with 4 years as an ML engineer focused on model training, data processing, EDA, and deployment. Over the last 2 years, I've specialized in building production-grade GenAI applications leveraging Claude and advanced LLM technologies.</p>
+                <p>My core strength is architecting and deploying AI solutions on AWS using Bedrock, serverless architectures, and modern tools like LangChain and LangGraph. I'm experienced in RAG systems, prompt engineering, semantic search, and building scalable AI-powered backends with FastAPI.</p>
+                <p>I'm passionate about bridging the gap between AI capabilities and real-world applications, with a focus on responsible AI development, production readiness, and solving complex problems at scale.</p>
+            </div>
+            <div>
+                <h3 style="margin-bottom: 1rem;">Core Expertise</h3>
+                <div class="skills-grid">
+                    <div class="skill-badge">Claude API</div>
+                    <div class="skill-badge">Claude Code</div>
+                    <div class="skill-badge">GitHub Copilot</div>
+                    <div class="skill-badge">AWS Bedrock</div>
+                    <div class="skill-badge">LangChain</div>
+                    <div class="skill-badge">LangGraph</div>
+                    <div class="skill-badge">RAG Systems</div>
+                    <div class="skill-badge">Prompt Engineering</div>
+                    <div class="skill-badge">FastAPI</div>
+                    <div class="skill-badge">Python</div>
+                    <div class="skill-badge">FAISS</div>
+                    <div class="skill-badge">ChromaDB</div>
+                    <div class="skill-badge">Git/GitHub</div>
+                    <div class="skill-badge">GitLab</div>
+                </div>
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem;">AWS Services</h3>
+                <div class="skills-grid">
+                    <div class="skill-badge">Lambda</div>
+                    <div class="skill-badge">API Gateway</div>
+                    <div class="skill-badge">SageMaker</div>
+                    <div class="skill-badge">Bedrock</div>
+                    <div class="skill-badge">Knowledge Bases</div>
+                    <div class="skill-badge">OpenSearch</div>
+                    <div class="skill-badge">S3</div>
+                    <div class="skill-badge">DynamoDB</div>
+                    <div class="skill-badge">SQS</div>
+                    <div class="skill-badge">EC2</div>
+                    <div class="skill-badge">EKS</div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
+    <section id="projects">
+        <h2>Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-image">⚡</div>
+                <div class="project-content">
+                    <h3>Agentic RAG for Energy Sector</h3>
+                    <p>Production-grade agentic RAG application on AWS for the energy sector. Combines Claude, AWS Bedrock, and tool orchestration for intelligent document analysis and decision support.</p>
+                    <div class="project-tags">
+                        <span class="tag">Claude</span>
+                        <span class="tag">AWS Bedrock</span>
+                        <span class="tag">RAG</span>
+                        <span class="tag">Agents</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">📊</div>
+                <div class="project-content">
+                    <h3>Agentic Task Creator with LangGraph</h3>
+                    <p>LangGraph-powered agent that analyzes team discussions to automatically create tasks, generate HLDs/LLDs, and manage Git workflows and Jira tickets intelligently.</p>
+                    <div class="project-tags">
+                        <span class="tag">LangGraph</span>
+                        <span class="tag">Claude</span>
+                        <span class="tag">Jira API</span>
+                        <span class="tag">Git</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">🔐</div>
+                <div class="project-content">
+                    <h3>Document Q&A Platform with RBAC</h3>
+                    <p>RAG application allowing users to upload documents and ask questions with role-based access control. Built on Claude LLMs with secure multi-tenant architecture and granular permission management.</p>
+                    <div class="project-tags">
+                        <span class="tag">Claude API</span>
+                        <span class="tag">RAG</span>
+                        <span class="tag">RBAC</span>
+                        <span class="tag">FastAPI</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">🤖</div>
+                <div class="project-content">
+                    <h3>AWS Bedrock Claude Agent</h3>
+                    <p>Production serverless AI agent on AWS using Bedrock + Claude for multi-step reasoning with tool integration and memory management across distributed systems.</p>
+                    <div class="project-tags">
+                        <span class="tag">AWS Bedrock</span>
+                        <span class="tag">Claude</span>
+                        <span class="tag">Lambda</span>
+                        <span class="tag">API Gateway</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">📚</div>
+                <div class="project-content">
+                    <h3>RAG System with OpenSearch Serverless</h3>
+                    <p>Enterprise knowledge base using AWS Bedrock Knowledge Bases with OpenSearch serverless for semantic search and retrieval-augmented generation at scale.</p>
+                    <div class="project-tags">
+                        <span class="tag">AWS Knowledge Bases</span>
+                        <span class="tag">OpenSearch Serverless</span>
+                        <span class="tag">Bedrock</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-card">
+                <div class="project-image">⚙️</div>
+                <div class="project-content">
+                    <h3>FastAPI Backend with Claude Integration</h3>
+                    <p>Scalable REST API using FastAPI deployed on Lambda with Claude API integration for intelligent request processing and async task handling via SQS and DynamoDB.</p>
+                    <div class="project-tags">
+                        <span class="tag">FastAPI</span>
+                        <span class="tag">Claude API</span>
+                        <span class="tag">SQS</span>
+                        <span class="tag">DynamoDB</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Let's Build with AI</h2>
+        <div class="contact-wrapper">
+            <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 1.1rem;">Looking to develop intelligent AI applications or integrate LLMs into your product? I'd love to discuss your vision.</p>
+            <div class="contact-info">
+                <a href="mailto:bharanidharan119@gmail.com" class="contact-link">📧 Email</a>
+                <a href="https://github.com/Bharani119" class="contact-link">💻 GitHub</a>
+                <a href="https://www.linkedin.com/in/bharani-dharan-s-51b26b184/" class="contact-link">💼 LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p style="font-style: italic; color: var(--text-secondary);">"Code is like humor. When you have to explain it, it's bad." — Cory House</p>
+    </footer>
